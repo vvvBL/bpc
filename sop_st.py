@@ -19,7 +19,7 @@ def get_access_token():
     
     # Generate an access token
     access_token = credentials.token
-    st.write(f"Access Token: {access_token}")  # Log the access token for debugging (remove in production)
+    #st.write(f"Access Token: {access_token}")  # Log the access token for debugging (remove in production)
     return access_token
 
 # Function to make API call
@@ -48,13 +48,13 @@ def make_api_call(query):
     }
 
     # Log the request data
-    st.write(f"Request data: {json.dumps(data, indent=2)}")
+    #st.write(f"Request data: {json.dumps(data, indent=2)}")
 
     response = requests.post(url, headers=headers, json=data)
 
     # Log the response
-    st.write(f"Response status code: {response.status_code}")
-    st.write(f"Response text: {response.text}")
+    #st.write(f"Response status code: {response.status_code}")
+    #st.write(f"Response text: {response.text}")
 
     return response.json()
 
