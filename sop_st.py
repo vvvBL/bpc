@@ -41,7 +41,16 @@ def make_api_call(query):
             "extractiveContentSpec": {"maxExtractiveAnswerCount": 1}
         }
     }
+
+    # Log the request data
+    st.write(f"Request data: {json.dumps(data, indent=2)}")
+
     response = requests.post(url, headers=headers, json=data)
+
+    # Log the response
+    st.write(f"Response status code: {response.status_code}")
+    st.write(f"Response text: {response.text}")
+
     return response.json()
 
 # Streamlit app
