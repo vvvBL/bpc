@@ -2,6 +2,7 @@ import json
 import requests
 import streamlit as st
 from google.oauth2 import service_account
+from google.auth.transport.requests import Request
 
 # Function to load credentials and generate access token using Streamlit Secrets
 def get_access_token():
@@ -13,8 +14,12 @@ def get_access_token():
         gcp_credentials, scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
     
+    # Ensure the credentials are valid and refresh if necessary
+    credentials.refresh(Request())
+    
     # Generate an access token
     access_token = credentials.token
+    st.write(f"Access Token: {access_token}")  # Log the access token for debugging (remove in production)
     return access_token
 
 # Function to make API call
