@@ -5,7 +5,7 @@ from google.oauth2 import service_account
 
 # Function to load credentials and generate access token using Streamlit Secrets
 def get_access_token():
-    # Read the credentials from Streamlit secrets and convert to a dictionary
+    # Read the credentials from Streamlit secrets directly as a dictionary
     gcp_credentials = st.secrets["gcp_service_account"]
     
     # Load the credentials using google.oauth2 service_account
