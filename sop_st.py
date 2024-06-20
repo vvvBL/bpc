@@ -81,18 +81,6 @@ def main():
                     link = doc["derivedStructData"].get("link", "No link available")
                     st.write(f"Title: {title}")
                     st.write(f"Link: {link}")
-                    
-                    if "extractive_answers" in doc["derivedStructData"]:
-                        for answer in doc["derivedStructData"]["extractive_answers"]:
-                            page_number = answer.get("pageNumber", "Unknown")
-                            content = answer.get("content", "No content available")
-                            st.write(f"Page Number: {page_number}")
-                            st.write(f"Content: {content}")
-                    
-                    if "snippets" in doc["derivedStructData"]:
-                        for snippet in doc["derivedStructData"]["snippets"]:
-                            snippet_content = snippet.get("snippet", "No snippet available")
-                            st.write(f"Snippet: {snippet_content}")
             else:
                 st.write("No relevant answers found.")
         else:
