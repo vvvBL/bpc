@@ -14,8 +14,7 @@ def get_access_token():
     )
     
     # Generate an access token
-    access_token_info = credentials.with_claims(audience="https://discoveryengine.googleapis.com/")
-    access_token = access_token_info.token
+    access_token = credentials.token
     return access_token
 
 # Function to make API call
