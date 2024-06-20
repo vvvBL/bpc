@@ -68,15 +68,33 @@ def main():
             # Make API call
             api_response = make_api_call(query)
             # Display results
-            if "answers" in api_response:
-                for answer in api_response["answers"]:
-                    reference_file = answer.get("referenceFile", "No reference file available")
-                    extractive_content = answer.get("extractiveContent", {}).get("extractiveAnswer", [])
-                    answer_text = extractive_content[0]["text"] if extractive_content else "No answer available"
-                    st.write(f"Reference File: {reference_file}")
-                    st.write(f"Answer: {answer_text}")
+
+            # Check if there's a summary
+            if "summary" in api_response and "summaryText" in api_response["summary"]:
+                summary_text = api_response["summary"]["summaryText"]
+                st.write(f"Summary: {summary_text}")
+
+            if "results" in api_response and api_response["results"]:
+                for result in api_response["results"]:
+                    doc = result["document"]
+                    title = doc["derivedStructData"].get("title", "No title available")
+                    link = doc["derivedStructData"].get("link", "No link available")
+                    st.write(f"Title: {title}")
+                    st.write(f"Link: {link}")
+                    
+                    if "extractive_answers" in doc["derivedStructData"]:
+                        for answer in doc["derivedStructData"]["extractive_answers"]:
+                            page_number = answer.get("pageNumber", "Unknown")
+                            content = answer.get("content", "No content available")
+                            st.write(f"Page Number: {page_number}")
+                            st.write(f"Content: {content}")
+                    
+                    if "snippets" in doc["derivedStructData"]:
+                        for snippet in doc["derivedStructData"]["snippets"]:
+                            snippet_content = snippet.get("snippet", "No snippet available")
+                            st.write(f"Snippet: {snippet_content}")
             else:
-                st.write("No answers found.")
+                st.write("No relevant answers found.")
         else:
             st.write("Please enter a query.")
 
