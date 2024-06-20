@@ -1,4 +1,3 @@
-import os
 import json
 import requests
 import streamlit as st
@@ -6,9 +5,11 @@ from google.oauth2 import service_account
 
 # Function to load credentials and generate access token using Streamlit Secrets
 def get_access_token():
-    gcp_credentials = json.loads(st.secrets["gcp_service_account"])
+    # Convert the AttrDict to a JSON string
+    gcp_credentials = st.secrets["gcp_service_account"]
+    gcp_credentials_json = json.dumps(gcp_credentials)
     credentials = service_account.Credentials.from_service_account_info(
-        gcp_credentials, scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        json.loads(gcp_credentials_json), scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
     access_token_info = credentials.with_claims(audience="https://discoveryengine.googleapis.com/")
     access_token = access_token_info.token
