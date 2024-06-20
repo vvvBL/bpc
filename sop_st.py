@@ -64,7 +64,7 @@ def main():
     query = st.text_input("Enter your query:")
     if st.button("Search"):
         if query:
-            st.write(f"Searching for: {query}")
+            #st.write(f"Searching for: {query}")
             # Make API call
             api_response = make_api_call(query)
             # Display results
