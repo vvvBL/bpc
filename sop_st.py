@@ -1,11 +1,25 @@
-import streamlit as st
+import os
+import json
 import requests
+import streamlit as st
+from google.oauth2 import service_account
+
+# Function to load credentials and generate access token using Streamlit Secrets
+def get_access_token():
+    gcp_credentials = json.loads(st.secrets["gcp_service_account"])
+    credentials = service_account.Credentials.from_service_account_info(
+        gcp_credentials, scopes=["https://www.googleapis.com/auth/cloud-platform"]
+    )
+    access_token_info = credentials.with_claims(audience="https://discoveryengine.googleapis.com/")
+    access_token = access_token_info.token
+    return access_token
 
 # Function to make API call
 def make_api_call(query):
+    access_token = get_access_token()
     url = "https://discoveryengine.googleapis.com/v1alpha/projects/418296190033/locations/global/collections/default_collection/dataStores/sop-files_1718096167786/servingConfigs/default_search:search"
     headers = {
-        "Authorization": f"Bearer {YOUR_ACCESS_TOKEN}",  # Replace with your access token logic
+        "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json"
     }
     data = {
@@ -37,10 +51,11 @@ def main():
             # Make API call
             api_response = make_api_call(query)
             # Display results
-            if api_response.get("answers"):
+            if "answers" in api_response:
                 for answer in api_response["answers"]:
-                    reference_file = answer["referenceFile"]
-                    answer_text = answer["extractiveContent"]["extractiveAnswer"][0]["text"]
+                    reference_file = answer.get("referenceFile", "No reference file available")
+                    extractive_content = answer.get("extractiveContent", {}).get("extractiveAnswer", [])
+                    answer_text = extractive_content[0]["text"] if extractive_content else "No answer available"
                     st.write(f"Reference File: {reference_file}")
                     st.write(f"Answer: {answer_text}")
             else:
