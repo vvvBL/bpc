@@ -5,11 +5,15 @@ from google.oauth2 import service_account
 
 # Function to load credentials and generate access token using Streamlit Secrets
 def get_access_token():
-    # Convert the AttrDict to a dictionary
-    gcp_credentials = dict(st.secrets["gcp_service_account"])
+    # Read the credentials from Streamlit secrets and convert to a dictionary
+    gcp_credentials = st.secrets["gcp_service_account"]
+    
+    # Load the credentials using google.oauth2 service_account
     credentials = service_account.Credentials.from_service_account_info(
         gcp_credentials, scopes=["https://www.googleapis.com/auth/cloud-platform"]
     )
+    
+    # Generate an access token
     access_token_info = credentials.with_claims(audience="https://discoveryengine.googleapis.com/")
     access_token = access_token_info.token
     return access_token
